@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const scrollToSection = (id: string) => {
@@ -23,6 +24,9 @@ const Index = () => {
               <button onClick={() => scrollToSection('home')} className="text-sm hover:text-primary transition-colors">Главная</button>
               <button onClick={() => scrollToSection('termites')} className="text-sm hover:text-primary transition-colors">Термиты</button>
               <button onClick={() => scrollToSection('ants')} className="text-sm hover:text-primary transition-colors">Муравьи</button>
+              <Link to="/insects" className="text-sm hover:text-primary transition-colors font-medium">
+                Насекомые
+              </Link>
               <button onClick={() => scrollToSection('catalog')} className="text-sm hover:text-primary transition-colors">Каталог</button>
               <button onClick={() => scrollToSection('research')} className="text-sm hover:text-primary transition-colors">Исследования</button>
               <button onClick={() => scrollToSection('library')} className="text-sm hover:text-primary transition-colors">Библиотека</button>
@@ -43,10 +47,16 @@ const Index = () => {
             насекомых — аутотизу (autothysis). Изучаем виды, проводящие защитное 
             самопожертвование ради выживания колонии.
           </p>
+          <Link to="/insects">
+            <Button size="lg" className="mb-8 text-lg px-8">
+              <Icon name="Bug" className="w-5 h-5 mr-2" />
+              Открыть полный каталог 40 видов
+            </Button>
+          </Link>
           <div className="grid md:grid-cols-3 gap-6 mt-12">
             <Card className="p-6 hover:shadow-lg transition-shadow animate-scale-in">
               <Icon name="Microscope" className="w-12 h-12 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">50+ видов</h3>
+              <h3 className="text-xl font-semibold mb-2">40+ видов</h3>
               <p className="text-muted-foreground">В нашей научной базе данных</p>
             </Card>
             <Card className="p-6 hover:shadow-lg transition-shadow animate-scale-in">
@@ -240,7 +250,13 @@ const Index = () => {
               { name: "Colobopsis saundersi", family: "Formicidae", location: "Малайзия", status: "Изучен" },
               { name: "Globitermes sulphureus", family: "Termitidae", location: "Азия", status: "В изучении" },
               { name: "Camponotus cylindricus", family: "Formicidae", location: "Борнео", status: "Изучен" },
-              { name: "Anoplotermes species", family: "Termitidae", location: "Амазония", status: "В изучении" },
+              { name: "Anoplotermes pacificus", family: "Termitidae", location: "Амазония", status: "В изучении" },
+              { name: "Termes hospes", family: "Termitidae", location: "Бразилия", status: "Изучен" },
+              { name: "Coptotermes formosanus", family: "Rhinotermitidae", location: "Тайвань", status: "Изучен" },
+              { name: "Macrotermes carbonarius", family: "Termitidae", location: "Индия", status: "Изучен" },
+              { name: "Nasutitermes corniger", family: "Termitidae", location: "Карибы", status: "Изучен" },
+              { name: "Colobopsis leonardi", family: "Formicidae", location: "Таиланд", status: "Изучен" },
+              { name: "Dentispicotermes globiceps", family: "Termitidae", location: "Гвиана", status: "Изучен" },
             ].map((species, idx) => (
               <Card key={idx} className="p-6 hover:shadow-lg transition-all hover:scale-105 cursor-pointer">
                 <div className="flex items-start justify-between mb-3">
@@ -261,6 +277,14 @@ const Index = () => {
                 </div>
               </Card>
             ))}
+          </div>
+          <div className="mt-12 text-center">
+            <Link to="/insects">
+              <Button size="lg" variant="outline">
+                <Icon name="ArrowRight" className="w-5 h-5 mr-2" />
+                Посмотреть все 40 видов в энциклопедии
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
