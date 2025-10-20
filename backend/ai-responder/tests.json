@@ -1,0 +1,15 @@
+{
+  "tests": [
+    {
+      "name": "Process AI responses",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "processed": "number"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

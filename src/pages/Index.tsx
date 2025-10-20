@@ -7,39 +7,84 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    organization: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://functions.poehali.dev/e4bb76a6-f3a0-4039-a3ed-132d87ca7cc0', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast({
+          title: "✅ Сообщение отправлено!",
+          description: "Нейросеть ответит вам через 10 минут на указанный email.",
+        });
+        setFormData({ name: '', email: '', organization: '', message: '' });
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (error) {
+      toast({
+        title: "❌ Ошибка",
+        description: "Не удалось отправить сообщение. Попробуйте позже.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen">
-      <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md border-b shadow-sm z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-primary">Самопожертвование насекомых</h1>
             <div className="hidden md:flex items-center gap-6">
-              <button onClick={() => scrollToSection('home')} className="text-sm hover:text-primary transition-colors">Главная</button>
-              <button onClick={() => scrollToSection('termites')} className="text-sm hover:text-primary transition-colors">Термиты</button>
-              <button onClick={() => scrollToSection('ants')} className="text-sm hover:text-primary transition-colors">Муравьи</button>
-              <Link to="/insects" className="text-sm hover:text-primary transition-colors font-medium">
+              <button onClick={() => scrollToSection('home')} className="text-sm hover:text-primary transition-all hover:scale-105">Главная</button>
+              <button onClick={() => scrollToSection('termites')} className="text-sm hover:text-primary transition-all hover:scale-105">Термиты</button>
+              <button onClick={() => scrollToSection('ants')} className="text-sm hover:text-primary transition-all hover:scale-105">Муравьи</button>
+              <Link to="/insects" className="text-sm hover:text-primary transition-all font-medium px-3 py-1 rounded-full hover:bg-primary/10 hover:scale-105">
                 Насекомые
               </Link>
-              <button onClick={() => scrollToSection('catalog')} className="text-sm hover:text-primary transition-colors">Каталог</button>
-              <button onClick={() => scrollToSection('research')} className="text-sm hover:text-primary transition-colors">Исследования</button>
-              <button onClick={() => scrollToSection('library')} className="text-sm hover:text-primary transition-colors">Библиотека</button>
-              <button onClick={() => scrollToSection('terms')} className="text-sm hover:text-primary transition-colors">Термины</button>
-              <button onClick={() => scrollToSection('contact')} className="text-sm hover:text-primary transition-colors">Контакты</button>
+              <button onClick={() => scrollToSection('catalog')} className="text-sm hover:text-primary transition-all hover:scale-105">Каталог</button>
+              <button onClick={() => scrollToSection('research')} className="text-sm hover:text-primary transition-all hover:scale-105">Исследования</button>
+              <button onClick={() => scrollToSection('library')} className="text-sm hover:text-primary transition-all hover:scale-105">Библиотека</button>
+              <button onClick={() => scrollToSection('terms')} className="text-sm hover:text-primary transition-all hover:scale-105">Термины</button>
+              <button onClick={() => scrollToSection('contact')} className="text-sm hover:text-primary transition-all hover:scale-105">Контакты</button>
             </div>
           </div>
         </div>
       </nav>
 
-      <section id="home" className="pt-32 pb-20 px-4">
-        <div className="container mx-auto text-center">
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
+      <section id="home" className="pt-32 pb-20 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-transparent pointer-events-none" />
+        <div className="container mx-auto text-center relative z-10">
+          <h2 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in gradient-text">
             Защитное самопожертвование<br />в мире насекомых
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-12 animate-fade-in">
@@ -54,17 +99,17 @@ const Index = () => {
             </Button>
           </Link>
           <div className="grid md:grid-cols-3 gap-6 mt-12">
-            <Card className="p-6 hover:shadow-lg transition-shadow animate-scale-in">
+            <Card className="p-6 hover:shadow-xl transition-all hover:-translate-y-2 animate-scale-in border-2 hover:border-primary/50 animate-float">
               <Icon name="Microscope" className="w-12 h-12 text-primary mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-2">40+ видов</h3>
               <p className="text-muted-foreground">В нашей научной базе данных</p>
             </Card>
-            <Card className="p-6 hover:shadow-lg transition-shadow animate-scale-in">
+            <Card className="p-6 hover:shadow-xl transition-all hover:-translate-y-2 animate-scale-in border-2 hover:border-secondary/50" style={{ animationDelay: '0.1s' }}>
               <Icon name="BookOpen" className="w-12 h-12 text-secondary mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-2">200+ статей</h3>
               <p className="text-muted-foreground">Научных публикаций и исследований</p>
             </Card>
-            <Card className="p-6 hover:shadow-lg transition-shadow animate-scale-in">
+            <Card className="p-6 hover:shadow-xl transition-all hover:-translate-y-2 animate-scale-in border-2 hover:border-primary/50" style={{ animationDelay: '0.2s' }}>
               <Icon name="Users" className="w-12 h-12 text-primary mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-2">Сообщество</h3>
               <p className="text-muted-foreground">Исследователей со всего мира</p>
@@ -456,41 +501,74 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="contact" className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-4xl">
+      <section id="contact" className="py-20 px-4 bg-gradient-to-br from-primary/5 via-secondary/5 to-transparent relative overflow-hidden">
+        <div className="absolute top-20 right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 left-20 w-64 h-64 bg-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="container mx-auto max-w-4xl relative z-10">
           <div className="flex items-center gap-3 mb-8 justify-center">
             <Icon name="Mail" className="w-10 h-10 text-primary" />
             <h2 className="text-4xl font-bold">Контакты</h2>
           </div>
-          <Card className="p-8">
+          <Card className="p-8 shadow-2xl border-2 hover:border-primary/30 transition-all">
+            <div className="mb-6 p-4 bg-secondary/10 rounded-lg border-l-4 border-secondary">
+              <div className="flex items-start gap-3">
+                <Icon name="Bot" className="w-6 h-6 text-secondary mt-1 flex-shrink-0" />
+                <div>
+                  <p className="font-semibold text-secondary mb-1">🤖 Автоматический ответ нейросети</p>
+                  <p className="text-sm text-muted-foreground">
+                    Разработчик сейчас очень занят исследованиями. Через 10 минут после отправки 
+                    сообщения нейросеть автоматически пришлет предварительный ответ на ваш email. 
+                    Разработчик обязательно свяжется лично позже!
+                  </p>
+                </div>
+              </div>
+            </div>
             <p className="text-center text-muted-foreground mb-8">
               Свяжитесь с нами для сотрудничества, предложений или вопросов о наших исследованиях
             </p>
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Имя</label>
-                  <Input placeholder="Ваше имя" />
+                  <label className="text-sm font-medium mb-2 block">Имя *</label>
+                  <Input 
+                    placeholder="Ваше имя" 
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Email</label>
-                  <Input type="email" placeholder="your@email.com" />
+                  <label className="text-sm font-medium mb-2 block">Email *</label>
+                  <Input 
+                    type="email" 
+                    placeholder="your@email.com" 
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    required
+                  />
                 </div>
               </div>
               <div>
                 <label className="text-sm font-medium mb-2 block">Организация</label>
-                <Input placeholder="Университет или исследовательский институт" />
+                <Input 
+                  placeholder="Университет или исследовательский институт" 
+                  value={formData.organization}
+                  onChange={(e) => setFormData({...formData, organization: e.target.value})}
+                />
               </div>
               <div>
-                <label className="text-sm font-medium mb-2 block">Сообщение</label>
+                <label className="text-sm font-medium mb-2 block">Сообщение *</label>
                 <Textarea 
                   placeholder="Опишите ваш вопрос или предложение о сотрудничестве" 
                   rows={6}
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  required
                 />
               </div>
-              <Button className="w-full" size="lg">
+              <Button className="w-full animate-glow" size="lg" disabled={isSubmitting}>
                 <Icon name="Send" className="w-4 h-4 mr-2" />
-                Отправить сообщение
+                {isSubmitting ? 'Отправка...' : 'Отправить сообщение'}
               </Button>
             </form>
           </Card>

@@ -1,0 +1,21 @@
+{
+  "tests": [
+    {
+      "name": "Submit contact form",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "name": "Иван Петров",
+        "email": "ivan@example.com",
+        "organization": "МГУ",
+        "message": "Интересуюсь сотрудничеством по исследованиям термитов"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
